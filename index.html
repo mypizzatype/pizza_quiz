@@ -57,9 +57,32 @@ h2{font-size:28px;margin:4px 0}
 .ih{font-weight:700;color:var(--ac);font-size:13px;margin-bottom:2px}
 .poster .bar i{background:linear-gradient(90deg,var(--ac),var(--ac2))}
 .ft{margin-top:14px;padding-top:12px;border-top:2px dashed var(--bd);font-size:12px;color:var(--sub)}
+
+.lock .w{display:none}
+#gate{position:fixed;inset:0;z-index:99;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+#gate .card{width:100%;max-width:400px;text-align:center;box-shadow:0 14px 40px -16px var(--ac)}
+#gate input{width:100%;font:inherit;font-size:20px;text-align:center;letter-spacing:3px;text-transform:uppercase;padding:14px;border-radius:14px;border:1.5px solid var(--bd);background:var(--bg);color:var(--tx);margin-top:14px}
+#gate input:focus{outline:none;border-color:var(--ac)}
+#ge{color:var(--ac);font-size:13px;min-height:20px;margin-top:8px}
+
+.gc{background:var(--card);border:1px solid var(--bd);border-radius:22px;padding:20px;margin-top:16px;text-align:left;box-shadow:0 10px 30px -18px var(--ac)}
+.gc h3{margin:0 0 6px;font-size:19px}
+.gc h4{margin:14px 0 4px;font-size:14px;color:var(--ac)}
+.gc p{margin:0;font-size:14.5px}
+.pr{border-top:1px dashed var(--bd);padding:8px 0;font-size:13.5px}
+.pr b{margin-right:8px}
+.pl{font-size:12px;color:var(--ac)}
+.pr div{color:var(--sub);margin-top:2px}
+.ac{display:flex;gap:10px;margin-top:8px;font-size:14.5px}
+.ac i{font-style:normal;background:var(--ac);color:#fff;border-radius:50%;width:22px;height:22px;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px}
 </style>
 </head>
-<body>
+<body class="lock">
+<div id="gate"><div class="card"><div class="big">🍕</div><h1>披萨人格测试</h1>
+<p class="sub">请输入口令解锁测试<br>下单后私信获取口令</p>
+<input id="gi" placeholder="PZ-XXXXX" autocomplete="off" autocapitalize="characters">
+<div id="ge"></div>
+<button class="go" style="margin-top:6px" onclick="gateGo()">解锁测试</button></div></div>
 <div class="w">
 <div id="s0" class="card c">
 <div class="big">🍕</div>
@@ -87,6 +110,7 @@ h2{font-size:28px;margin:4px 0}
 <div class="ax" id="ax"></div>
 <div class="ft">🍕 披萨人格测试 · 测测你是哪种披萨</div>
 </div>
+<div id="guide"></div>
 <div class="row"><button class="p" onclick="share()" id="sb">复制结果分享</button><button onclick="start()">再测一次</button></div>
 <p class="sub">截图发给朋友，看看谁和你最配 🍕</p>
 </div>
@@ -144,12 +168,43 @@ function finish(){
  $("poster").style.setProperty("--ac",C[0]);$("poster").style.setProperty("--ac2",C[1]);
  const ax=[["外向","内向","E","I"],["传统","探索","S","N"],["理性","感性","R","F"]];
  $("ax").innerHTML=ax.map(a=>{const v=Math.round(sc[a[2]]/(sc[a[2]]+sc[a[3]])*100);return "<div><span>"+a[0]+" "+v+"%</span><span>"+a[1]+" "+(100-v)+"%</span></div><div class='bar'><i style='width:"+v+"%'></i></div>"}).join("");
- show(2);window.scrollTo(0,0);
+ guide(k);show(2);window.scrollTo(0,0);
+}
+
+const G={
+ESR:{p:"四重芝士的细腻能补上你忽略的情绪：你给方向，TA给温度。关键是让TA说出真实需求，别用“最优解”打断。",n:"梨子蓝纹追求意义和感觉，你追求结果和效率，常被觉得“冷”。化解：先问“你怎么想”，再给方案。",l:"把“我为你好”换成“我懂你”，多说感受，少给建议。",w:"天然的项目负责人，但要给团队留出表达空间。",f:"你是组局的人，别忘了问问谁其实想安静。",s:"压力大时更强势、事事亲自盯，睡眠被挤占。",r:"把任务拆成清单并授权一件事；每天15分钟无目的散步。",a:["授权一件你想自己做的事","问一个朋友“最近真实状态怎样”","睡前写下3件已完成的事，允许明天不完美"]},
+ESF:{p:"玛丽娜拉稳而克制，给你的热情一个落脚点；你带TA走进人群。关键是别因为TA话少就觉得被拒绝。",n:"松露蘑菇需要大量独处，你的高频关心会让TA窒息。化解：约定“独处时间”，别把它当成冷淡。",l:"你习惯付出，学会直接说“我需要你”。",w:"团队的粘合剂，但别让自己变成“万能帮忙的人”。",f:"记得所有人的生日，也要允许朋友偶尔不回你。",s:"压力大时过度付出，嘴上说没事，其实很委屈。",r:"每天留一个“只为自己”的时段；练习说“这次不行”。",a:["拒绝一个你不想答应的请求","给自己安排一次不带别人的小餐","对一个人直说你想要的回应"]},
+ENR:{p:"夏威夷的乐观和不在乎眼光能接住你的火力，两人像开了加速器。关键是偶尔一起停下来复盘，别只冲。",n:"四重芝士需要慢节奏和被体贴，你的直接容易被听成否定。化解：先肯定再提意见，给TA思考时间。",l:"除了行动，也要用语言说出在乎，别把争论当沟通。",w:"适合带头突破，但要留意他人节奏，别只看结果。",f:"你是敢说真话的那个，用玩笑软化锋芒。",s:"压力大时更急躁易怒，用工作麻痹自己。",r:"先用高强度运动释放，再做5分钟深呼吸；重要决定隔夜再发消息。",a:["在一次争论里先说“你说得有道理”","安排一个完全不工作的半天","问同事“我刚才是不是太快了”"]},
+ENF:{p:"魔鬼辣肠执行力强，能把你的点子落地；你给TA松弛感。关键是约好谁负责收尾，别两个人都在起跑。",n:"玛丽娜拉重规则与细节，你的随性让TA焦虑。化解：重要的事提前讲好，细节交给TA把关。",l:"新鲜感是你的强项，也要经营平淡日子里的承诺。",w:"创意担当，找一个负责落地的搭档。",f:"气氛担当，朋友低落时要的是倾听，不是笑话。",s:"压力大时会逃避，转去追新鲜事，事情越堆越多。",r:"“未完成清单”只选1件完成；每晚10分钟整理。",a:["完成一件拖了很久的事","对一个承诺提前确认","晚上少刷一小时，留给自己安静"]},
+ISR:{p:"超级至尊会带你走进人群、帮你表达，你给TA安稳和靠谱。关键是别躲在“我没事”后面，学着说出需求。",n:"夏威夷太随性，你会没有安全感。化解：把关键约定说清楚，其他事放手。",l:"用具体行动表达爱，也要偶尔说出口。",w:"专业可靠，要主动汇报成果，别默默做。",f:"圈子小而深，每月主动约一次。",s:"压力大时封闭自己、回避沟通，对细节过度苛刻。",r:"每天一段完全独处；把担心的事写下来，分成“能控制”和“不能控制”。",a:["对一位朋友说“最近想你了”","汇报一项你默默完成的工作","尝试一个没吃过的新口味"]},
+ISF:{p:"玛格丽特稳定果断，能替你挡住外界压力、帮你做决定。关键是别把所有事都交给TA，说出你的想法。",n:"魔鬼辣肠节奏快、说话直，你会被刺到。化解：告诉TA你需要缓冲时间，别憋着。",l:"别只付出不表达，委屈当天讲。",w:"团队的稳定器，要学着为成果争取认可。",f:"少数深交，别因为怕麻烦而不开口求助。",s:"压力大时自我消耗，把别人的情绪也背在身上。",r:"写情绪日记；每天一件“不为别人”的小事；睡前放松。",a:["把一件不舒服的事说出来","为自己争取一次认可或休息","向一个朋友说出你的需要"]},
+INR:{p:"梨子蓝纹同样内向、爱深度，你们能聊一整晚的意义。关键是别只在脑内交流，要把想法说出来。",n:"超级至尊社交密度高、关心多，你会耗电。化解：直接说“我需要独处”，而不是躲开。",l:"把爱说出来，别指望对方猜。",w:"战略和分析担当，主动解释思路，避免被误读。",f:"圈子小而精，偶尔参加一次聚会。",s:"压力大时过度思考、失眠、拒绝沟通。",r:"把想法写下来；每天20分钟身体活动，打断反刍。",a:["把一个想法完整讲给一个人听","参加一次轻松的小聚会","到户外走30分钟，不带手机"]},
+INF:{p:"松露蘑菇懂你的沉默与深度，不会催你解释。关键是别一起沉进内耗里，要有人推一把去行动。",n:"玛格丽特要结果，你要意义，常被说“不现实”。化解：用对方能懂的语言讲价值，再给出一个小目标。",l:"把期待说清楚，别期待被读心。",w:"创意与洞察是强项，借助外力把想法落地。",f:"真诚的倾听者，也要学会拒绝。",s:"压力大时陷入自我怀疑，拖延，情绪过山车。",r:"把大目标切成10分钟的小任务；用写作或画画安放情绪。",a:["只做一件小事，做完就算赢","把一个想法分享给信任的人","对一次拖延，先开始5分钟"]}
+};
+function guide(k){
+ const g=G[k],t=T[k],pn=t.m.split("（")[0],xn=t.x.split("（")[0];
+ const H2=["社交节奏不同：一个爱热闹，一个要独处","求稳与求新：要协商“尝新”的频率","理性与感性：吵架时先接情绪，再讲道理"];
+ const rows=Object.keys(T).filter(o=>o!=k).map(o=>{const d=[0,1,2].filter(j=>o[j]!=k[j]),n=T[o].n;let lb,tx;
+  if(n==pn){lb="💞 最佳搭档";tx="详见上方分析"}else if(n==xn){lb="💥 天敌";tx="详见上方分析"}
+  else{lb=["","😊 同频好友","✨ 互补型","🎲 反差型"][d.length];tx=d.map(j=>H2[j]).join("；")}
+  return "<div class='pr'><b>"+T[o].e+" "+n.replace("披萨","")+"</b><span class='pl'>"+lb+"</span><div>"+tx+"</div></div>"}).join("");
+ const g1="<div class='gc'><h3>💞 相处指南</h3><h4>最佳搭档 · "+pn+"</h4><p>"+g.p+"</p><h4>天敌 · "+xn+"</h4><p>"+g.n+"</p><h4>恋爱</h4><p>"+g.l+"</p><h4>职场</h4><p>"+g.w+"</p><h4>朋友</h4><p>"+g.f+"</p><h4>和另外7种披萨的配对速查表</h4>"+rows+"</div>";
+ const g2="<div class='gc'><h3>🌱 成长建议</h3><h4>压力大时的典型反应</h4><p>"+g.s+"</p><h4>调节方法</h4><p>"+g.r+"</p><h4>本周可尝试的3个小行动</h4>"+g.a.map((x,i)=>"<div class='ac'><i>"+(i+1)+"</i><span>"+x+"</span></div>").join("")+"</div>";
+ const gd=document.getElementById("guide"),pz=document.getElementById("poster");
+ gd.style.setProperty("--ac",pz.style.getPropertyValue("--ac"));gd.style.setProperty("--ac2",pz.style.getPropertyValue("--ac2"));
+ gd.innerHTML=g1+g2;
 }
 function share(){
  const t="我是【"+res.n+"】"+res.e+"——"+res.t+"。最佳搭档："+res.m.split("（")[0]+"。你是哪种披萨？来测测 👉 "+location.href;
  try{navigator.clipboard.writeText(t).then(()=>{$("sb").textContent="已复制 ✓"},()=>{prompt("复制分享文案",t)})}catch(e){prompt("复制分享文案",t)}
 }
+</script>
+<script>
+const H=["8561c8608ddaf62f655cc4f0b3b9054e50d0013cd0a9d9e5a6c517a39e521f6d", "c4bc52b92289652993c8d8cceab58ddb75230dc08900d08586d1d20ac5f92ebb", "7e8764924bbb5231326fbe8e2c310e21ea116430284628ad3f07f1bd7deac1cb", "8bd2f7db5dc0e17dd6cf960d89fccdc0002b0d99862c5a7a6fe67040ee738902", "a324c037e162ff7e49d844b30905149c0844ca595f7e1fd1ff67a9f432797ba8", "1e14a061848cbfe826fb9ddad3bc2f4bc8a42355d95dffa53d350f2fd4662e09", "c5a90f592029939466687b3cd57c2982fde7277c894ea2edf7c4b085855e9783", "0ee00fb4a521e9b7840d9a46a331a7f08a65537f6f749d03b96466ae8f163bbb", "dd6c62671a26a9d2ae882b2b80e3ef44fdf5840cd569c68cabd12c6cc83b0548", "7914cb89b924e4fa6daaabd30b332763af483c4f9021480c621bafb143ec21ed", "fa322ef55a4bc9635be1c9991545330d152c2eff6789c1a35f1f46927b1cdb08", "2beddb004f795ba7badb57b226d1f9ae0874bcd0856f38a3652cd29ddf5c9926", "a28ae795198c4a86d882cc3e1534eb8cad892a5716f9c76a995dcb0aa6836814", "78884050a433d8bd25753e630295f32843c8b965c43342f6363f1a493b647338", "180039e389368079cc78cc91698d406dcf7a33ba488e89802c2165b96bc655a6", "c65c251712b395895e03c80b3db8afd5f49a8860d0db50b80b079987b2cf5513", "44fd6e3c470d26ff33c58ccd562004e78100332f7fe6d6ef02db5924513409d9", "16b73378b7882dc621300d81248ae4b36a57e60f925effb481b7f1279e0c1f44", "fefa6bca53898bf80aa4d7eeedefe1e989937a0ff33aa5596387ee489d46c2ee", "97c5e7f30822347c2f6c7b6b3b28b690d91637ebc037a2d4af1554a814e4b591", "717eb8dbf6b8556c166af608c11a174cc0d6bb7b6121aaef8248901f565b0d18", "64530e30ebe33c064b5acd71385bc5cea71c36f9aa3783f1b137cea1582ff42d", "4bd9257d5bce299e864bc06421f853738009216f3cdea53a5788b29bbef93bf4", "3d6f4ccc2c4c15dcf636fe8c9c5c43d8d67bdb208e6021fb58d732a60153029e", "e09ef91c08eea3812c59546521726b69361e2be3f08796f74ad8b4d0529eec9e", "1cfa7b9cf5972a19c30cffc317c3c052a713db79eed9f051329d78d0b4ed4926", "fa725e0fd30e704e6b0e3156acfe56faade6c310dc06dfe0e4236a1675da12f8", "9bc54e76a20172ba376cbbffba318c72dbec80bb7ea130612bd0ef021524047e", "ba70b51bfdce0844d106015ccf006fa3cf13ca1f357b65ab567ef1147a87f92a", "5966caa5631df7d2cd101180ac81560a0c1da5c78c6a560d8c35c9092c267326", "da54bb820a98ba2f20c563856f1dbc143c36924c08230733868a61162b4cd18e", "f1b6eac10303b4ff3fc414ce25a4fb2fd02c174652dc99097568636fc633650d", "07178b2ea2ed5ec05c42ca0022defedf1aeefad2dad0b2a5489317765c204aad", "c8e168c55b746cce0c77e17d68d35fcfe0f66349209752f356744f9f1fdb83c7", "ef42a2944204abeb0ed215d301e79302b5519465142a1461834391de0c47b839", "2250628d7eea2dc44bbca34cba003d6bed2bf12aae7acdd9d7b934499c49d780", "38a84a14d909bc95faa4442c59f250e70c9eddb821f85c60d31ff7e2e7ead416", "4076396569b719d05d55e713f4c62cfe2c96aca9d8a0a44d66089dcf05823a55", "f62a014fc9e7698a917eb903bb6cdd00f8acc4cc70ee20cd92f26f9ce1390a3d", "4c5ae7c33b0c86e29f0b80af1ff249a6b1a64f003dcf318176b02c9d4de824c4", "f39c76d112034dd95d140a2600d14aee089e70da21516b190ac6e1db406019b9", "2c5fdfb1396582e87e992fc08231c83a33fcacf53735e3a0f6135f4653d68573", "783c9ac73fe1266823f58f33a3065b20be4c35a0e32ac51b525edd0cd59a492d", "8330db31510cdd6fb4367ab920ab0634918fd5dde8a160524e98673effe326ac", "2e9b69dfd6c882c6538168c30abc48ee617a1c49fb4a7a17be94f8a1e90e1652", "e42e17ccaf55adf424b7f7f7f774da5d1574120d71846195b2f6f912185ffa97", "2ff6fcddaded50da274667f59fb400962b297e57d61d8b0af6e1075cc914d850", "cda6ab84a82913a7ff1f48ae81eda82304405dfc04a26f0a5ab6570e21d3beec", "5384e71fce910b053c95cc87458930272eef31f3249a9a0a0431d191a73aeebc", "ad8a7e5406111effd9a5331b64eca0bb68f3f9f7fde7850eb705c8a434ffc185", "a6ed1d8d38dc666495e12e90483c8413d64042fbb6220ca5ae467c86dbb4ef39", "a3d12f12f3ac073d1528219146a8972ff48b461a11902ac10d7798553aa13ddb", "7e150b6cf38f69ba8cde0b024ee635d4c3c1147ae0c248b653fafb5162e6b5c8", "2b4074e08e4a86178d2be1d68523ffda8c5c94254fe903927a7e3da076f0863b", "c554722597d68582d9f97dbfea65b373401787411af54d3fba4682be430f0396", "4010b55d17a0683380a235c5c26bfe47d5c12b43e27ac2cfa2958fe0185e8690", "1e22b21e29763052e65ee616c43068d3ccc2ac365084af1cb3d917b3c5c09d88", "b97996fe00dc08dbe611a6ed6ee54764c02bab041417ee94211260c77eb1b948", "878140b6edfb75312896e988a73e311bca0c0d1fe85e7a21158f51261abbe9de", "a6c94753e3c9e9ecb7ad3cd573328fb08f523b550052f198e791b4de031a4a7d", "a253ae33d0ff9ea919e148e7c65dcdfa820863b8dcceb21ba39b7e02b5066503", "ef171404d082c876d1163126b0f326b86e8e7e36881ffbedc912d68eb349bda2", "4636b074e10e59e75d910d7ddc7b0c2ca9015fbfc9f5d34b172326d13ae0cbce", "195220f7512b170e0959c0dda3e69c1b228d84ef67d8fefe659cc68712ba1542", "38665dbc58600ea44f1d503aad2e7fd2eacf317e3068c6e8c1568bd453f3950f", "bd23d6c3260cca00b318afa13ca2b7c2746ae7e195ea776ac78b6e39b66e1f76", "b542423573d7e264beae47404be243bf120eb0ad339886d9d97cb05028988e7f", "263b633a424abd5a1b2df8ee1cfd6c0c909fbaf7c13a97b538e84ac02fe4bc03", "4b88aef8ec23f66cec58b903970681be60d49f778549d1e993a95c088253195c", "c58ef56efcc2376bf572d1fc7f5a9795b6b23e0406b2204f8379b2b409ddd04a", "4028bff62d815ea5810f86e311108a455e99034ee39612d7201d8887fa6e5cbe", "05f848b7bb2e7433cbf95b46ac715f311e91c220e9c374b7a12ac43e6f88f9d8", "5a496e5b299c4f4984b021f456c5442a42ce5b1c3e85271b30810c996791c175", "5c1ff267a951c48e3a2978e0103a3030d1aaff1a206b04e3c716b2a111aaa28f", "78abc82532e3eb98d5c82776b78c126f8d86015cd35d25960b52678242d16049", "23f2283d09ea06dbb8bf7c47905090e26f835222a1349ecce971562c4461da5b", "21fa03a28e5e86735d457729255e695baefb37edae1ed4426f89036f4d57e888", "aa91cf8d2fd4df72e3924f399defb76cfb21538aef7966990dbad5e14aee7669", "073c0024bafa4b1d41a6405248f5a37991de1470b11cfc8463765cbdb0efe4e9", "71358a2e64a3bd0f2ec14805b9fd6a9cefdf7dc1b0ea812e82a4992e4c4a936e", "42b3c29348e4413168525afabeb75f651de461c30b1f65af24781c6ec4185443", "da21fc2295d9f05d65f3342bb41ab4c0710e0b8af3e927e60877bf85be46ebd4", "ee02d42b7da1e32ac4171d3551d5fd31bd66f2a481b575a4574f26227c6ce0ba", "0825efd1d37e9be696c31995b1e65a9a9d2e13e0c5798277b8758c23afb40548", "af6638575de86f43985ffb11324088a52cb1f14849f262452b39c7a7e7a481eb", "929ffef8cffcea070b58de2760bc456c9e8d1bde914891d8242e5eaae43920fe", "10506cef4dab0cf473689111c5bb16fcb71618d59493f897f3cddc616b7e0161", "eb992f541d155bb8c4191aebea7261e9ac84d45e77806b9e02e587ffb86de4e8", "5cbbf96f9345416c409db93d75d39b9181cb7ecab944ca8490eac2d566738d83", "cc01788a88a2ac94f7b4a56979a56357797d385c8d9fd53bd2d5dd5a9c6c6609", "11b93ed1e9893f5236b111ff2e97246c05c73f08c283c8463279360df2b6be3e", "d4bc8afea095abd671430f1c5c31951b266cc57154da21488738dd43cb3336bd", "eac948ca029eeda802a34b33ecd1d6926cb9f52722f7d57a6ba6662deb63bbc1", "7ecccc5ace0c64f504adec0bac47b53243f0b00e11931e55b9119131026cba86", "a946eebf24e01a96d8d886001108c08bbb3948da6de5549a980b43c52108b243", "0238df32d3221e1dfcac71ee8051f9587bf4c1a5e957c8166060f65e4bbf3944", "02e130c75d570dafc4ca2d0b347354839d6c1becf148196e87287f1ac9c77100", "0c65a548e310633aca1a91edfda72e07937eb77ebb011df0170f5f4d53784baa", "36220bd038607b50df5fa86584ba1457a042f65ef58d963394c68393762292b5", "75be93f02b31958b5f21be14e03b61365d876c7a59b4aab4cefa3e23708b6b0f"];const SALT="pz2026";
+async function sha(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,"0")).join("")}
+function openGate(){document.body.classList.remove("lock");const g=document.getElementById("gate");if(g)g.remove()}
+async function gateGo(){const v=document.getElementById("gi").value.trim().toUpperCase().replace(/\s/g,"");let ok=false;try{const h=await sha(v+SALT);if(H.includes(h)){ok=true;try{localStorage.setItem("pz_ok",h)}catch(e){}openGate()}}catch(e){}if(!ok)document.getElementById("ge").textContent="口令不正确，请检查后重试"}
+try{const s=localStorage.getItem("pz_ok");if(s&&H.includes(s))openGate()}catch(e){}
 </script>
 </body>
 </html>
