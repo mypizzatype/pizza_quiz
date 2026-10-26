@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>你是哪种披萨？披萨人格测试</title>
+<style>
+:root{--bg:#fff7ec;--card:#fff;--tx:#2b1d14;--sub:#7a6555;--ac:#e8472b;--ac2:#f5a623;--bd:#f0dcc4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1410;--card:#2a201a;--tx:#f7ebdd;--sub:#bda590;--ac:#ff6a4d;--ac2:#f5b84a;--bd:#443428;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1b1410;--card:#2a201a;--tx:#f7ebdd;--sub:#bda590;--ac:#ff6a4d;--ac2:#f5b84a;--bd:#443428;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;line-height:1.6}
+.w{max-width:480px;margin:0 auto;padding:20px 18px 40px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:22px}
+.c{text-align:center}
+h1{font-size:26px;margin:8px 0}
+.big{font-size:72px;line-height:1.1}
+.sub{color:var(--sub);font-size:14px}
+button{font:inherit;cursor:pointer}
+.go{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0;border-radius:999px;padding:14px 36px;font-size:17px;font-weight:700;margin-top:18px}
+.op{display:block;width:100%;text-align:left;background:var(--bg);color:var(--tx);border:1.5px solid var(--bd);border-radius:14px;padding:14px;margin-top:12px;font-size:16px}
+.op:active{border-color:var(--ac);transform:scale(.98)}
+.pg{height:6px;background:var(--bd);border-radius:9px;overflow:hidden;margin-bottom:16px}
+.pg i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .3s}
+.q{font-size:19px;font-weight:700;margin:6px 0}
+.tag{display:inline-block;background:var(--ac);color:#fff;border-radius:999px;padding:3px 12px;font-size:12px;margin:4px 0}
+h2{font-size:28px;margin:4px 0}
+.bx{background:var(--bg);border-radius:12px;padding:12px 14px;margin-top:12px;font-size:15px}
+.bx b{color:var(--ac)}
+.ax{margin-top:14px;font-size:13px}
+.ax div{display:flex;justify-content:space-between;color:var(--sub)}
+.bar{height:8px;background:var(--bd);border-radius:9px;overflow:hidden;margin:3px 0 10px}
+.bar i{display:block;height:100%;background:var(--ac)}
+.row{display:flex;gap:10px;margin-top:16px}
+.row button{flex:1;border-radius:12px;padding:12px;border:1.5px solid var(--ac);background:transparent;color:var(--ac);font-weight:600}
+.row .p{background:var(--ac);color:#fff}
+.hide{display:none}
+#s0{background:linear-gradient(160deg,var(--card),var(--bg));box-shadow:0 14px 40px -16px var(--ac);padding:34px 22px}
+#s0 .big{font-size:84px;animation:fl 3s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-8px)}}
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px 0 4px}
+.chips span{background:var(--bg);border:1px solid var(--bd);border-radius:999px;padding:4px 12px;font-size:12px;color:var(--sub)}
+.go{box-shadow:0 8px 20px -6px var(--ac)}
+.op{border-radius:16px;transition:.15s}
+#s1{box-shadow:0 12px 36px -18px var(--ac)}
+.poster{position:relative;overflow:hidden;border-radius:28px;padding:26px 20px 18px;text-align:center;background:var(--card);border:1px solid var(--bd);box-shadow:0 16px 44px -14px var(--ac)}
+.poster::before{content:"";position:absolute;left:-30%;top:-20%;width:160%;height:300px;background:radial-gradient(closest-side,var(--ac2),transparent);opacity:.3;pointer-events:none}
+.poster>*{position:relative}
+.ring{width:132px;height:132px;margin:0 auto 10px;border-radius:50%;padding:5px;background:conic-gradient(var(--ac),var(--ac2),var(--ac));box-shadow:0 10px 30px -8px var(--ac)}
+.ring span{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border-radius:50%;background:var(--card);font-size:66px}
+.poster h2{font-size:30px;margin:6px 0;background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.poster .tag{background:linear-gradient(90deg,var(--ac),var(--ac2));padding:4px 14px}
+.code{display:inline-block;letter-spacing:3px;font-size:12px;color:var(--sub);border:1px dashed var(--bd);border-radius:8px;padding:2px 10px;margin:8px 4px 0}
+.poster p{text-align:left;font-size:15px;margin:14px 0}
+.grid{display:grid;gap:10px;text-align:left}
+.it{background:var(--bg);border-radius:14px;padding:11px 13px;font-size:14px;border-left:4px solid var(--ac)}
+.ih{font-weight:700;color:var(--ac);font-size:13px;margin-bottom:2px}
+.poster .bar i{background:linear-gradient(90deg,var(--ac),var(--ac2))}
+.ft{margin-top:14px;padding-top:12px;border-top:2px dashed var(--bd);font-size:12px;color:var(--sub)}
+</style>
+</head>
+<body>
+<div class="w">
+<div id="s0" class="card c">
+<div class="big">🍕</div>
+<h1>你是哪种披萨？</h1>
+<p class="sub">融合大五人格 · 荣格认知偏好 · 决策心理学<br>12道题，测出你的“披萨人格”</p>
+<div class="chips"><span>12道题</span><span>约2分钟</span><span>8种披萨人格</span></div>
+<p class="sub">用第一直觉作答，没有对错</p>
+<button class="go" onclick="start()">开始测试</button>
+</div>
+<div id="s1" class="card hide">
+<div class="pg"><i id="pg"></i></div>
+<div class="sub" id="no"></div>
+<div class="q" id="q"></div>
+<div id="ops"></div>
+</div>
+<div id="s2" class="hide">
+<div class="poster" id="poster">
+<div class="sub">你的披萨人格是</div>
+<div class="ring"><span id="re"></span></div>
+<h2 id="rn"></h2>
+<span class="tag" id="rt"></span><br>
+<span class="code" id="rc"></span>
+<p id="rd"></p>
+<div class="grid" id="rb"></div>
+<div class="ax" id="ax"></div>
+<div class="ft">🍕 披萨人格测试 · 测测你是哪种披萨</div>
+</div>
+<div class="row"><button class="p" onclick="share()" id="sb">复制结果分享</button><button onclick="start()">再测一次</button></div>
+<p class="sub">截图发给朋友，看看谁和你最配 🍕</p>
+</div>
+</div>
+<script>
+const Q=[
+["周五晚上电量满格，你更想……",["约一群朋友吃到打烊","E"],["在家一个人刷剧点外卖","I"]],
+["走进陌生聚会，你通常……",["主动搭话，很快聊开","E"],["先观察，找熟人或角落待着","I"]],
+["社交一整天后，你的状态是……",["越聊越有精神","E"],["需要独处回血","I"]],
+["点披萨时，你会……",["喊大家拼一个大的分着吃","E"],["自己一个小的，各吃各的","I"]],
+["看菜单时，你会……",["点上次吃过、稳稳好吃的","S"],["点没见过的新名字","N"]],
+["做计划时，你更像……",["步骤清楚，按清单推进","S"],["先有灵感，边走边调整","N"]],
+["你更相信……",["亲眼所见的事实和经验","S"],["直觉和各种可能性","N"]],
+["旅行觅食，你会……",["看口碑榜，去老字号","S"],["随便拐进一条小巷","N"]],
+["朋友向你倾诉烦恼，你先……",["帮他分析，给出方案","R"],["先抱抱他，共情情绪","F"]],
+["做重要决定时，你靠……",["列利弊清单对比","R"],["问问自己心里的感觉","F"]],
+["披萨只剩最后一块，大家都想要……",["按规则：谁还没吃过归谁","R"],["让给最想吃的人，自己无所谓","F"]],
+["被人批评时，你……",["先判断对不对，对就改","R"],["先难受一会儿，再慢慢消化","F"]]
+];
+const T={
+ESR:{e:"🍅",n:"玛格丽特披萨",t:"天生的靠谱领袖",d:"番茄、芝士、罗勒，简单却从不出错。你外向、务实、讲逻辑，像大五人格中尽责性与外向性双高的人，擅长把混乱变成秩序，是团队里最让人安心的那一个。",s:"执行力强，说到做到",b:"容易把“正确”当成唯一标准，忽略别人的情绪节奏",m:"四重芝士披萨（你主事，TA暖场）",x:"梨子蓝纹披萨（你要结果，TA要意义）",r:"常见款 14%"},
+ESF:{e:"🧀",n:"超级至尊披萨",t:"什么都想照顾到的暖场王",d:"料多到满出来，因为你总想让每个人都吃好。你外向、重传统、重情感，接近荣格理论中的“情感型社交者”，天生擅长凝聚人群，被需要会让你很有安全感。",s:"亲和力爆表，记得每个人的喜好",b:"习惯讨好与承担，常忘了自己也该被照顾",m:"玛丽娜拉披萨（TA稳，你暖）",x:"松露蘑菇披萨（TA疏离，你会觉得被冷落）",r:"常见款 15%"},
+ENR:{e:"🌶️",n:"魔鬼辣肠披萨",t:"自带火力的挑战者",d:"一口下去就知道你来了。你外向、爱探索、重逻辑，高开放性加高支配性，喜欢辩论、突破与赢。你不是不温柔，只是觉得效率比客套更尊重人。",s:"决断快，敢冒险，能带队突围",b:"太快太直，容易让人觉得压迫，也容易忽视休息",m:"夏威夷披萨（TA的疯能接住你的火）",x:"四重芝士披萨（节奏完全不同）",r:"稀有款 8%"},
+ENF:{e:"🍍",n:"夏威夷披萨",t:"争议满满的快乐源泉",d:"有人爱到死，有人恨到死，你完全不在意。你外向、好奇、重感受，典型的高开放性加高宜人性，用热情和创意点亮每个场子，是朋友圈里的灵感发动机。",s:"感染力强，永远有新点子",b:"三分钟热度，容易被新鲜事分散，答应的事偶尔掉线",m:"魔鬼辣肠披萨（一起干大事）",x:"玛丽娜拉披萨（你嫌TA太克制）",r:"稀有款 9%"},
+ISR:{e:"🌿",n:"玛丽娜拉披萨",t:"极简主义的沉稳专家",d:"没有芝士，只有番茄、大蒜、橄榄油，却极致纯粹。你内向、务实、讲逻辑，荣格所说的内倾思维型：话不多，但每句都经过验证，专注时是真正的行家。",s:"可靠、细致、不浮夸",b:"习惯自己扛，不说出口，别人以为你不需要帮助",m:"超级至尊披萨（TA带你走进人群）",x:"夏威夷披萨（太吵，也太不按规则）",r:"常见款 13%"},
+ISF:{e:"🫕",n:"四重芝士披萨",t:"慢热但极暖的守护者",d:"四种芝士层层融化，外表安静，内里浓郁。你内向、务实、重感情，依恋风格偏安全型，对少数人极其忠诚，是那种记得你三年前随口一句话的人。",s:"温柔稳定，有耐心，会默默照顾人",b:"过度体谅，委屈容易憋在心里",m:"玛格丽特披萨（TA给你方向感）",x:"魔鬼辣肠披萨（太冲，你会累）",r:"常见款 15%"},
+INR:{e:"🍄",n:"松露蘑菇披萨",t:"神秘深邃的思想家",d:"低调、昂贵、气味独特，喜欢的人会上瘾。你内向、爱抽象、重逻辑，类似荣格的“内倾直觉”，擅长看到事物背后的结构，独处时脑内是一整个宇宙。",s:"洞察力强，独立，能长期深度专注",b:"容易想太多，不爱解释，被误读为冷淡",m:"梨子蓝纹披萨（精神世界互相懂）",x:"超级至尊披萨（社交密度过高）",r:"稀有款 6%"},
+INF:{e:"🍐",n:"梨子蓝纹披萨",t:"理想主义的文艺灵魂",d:"甜与咸、柔与冲撞，一半人觉得奇怪，另一半觉得惊艳。你内向、富想象、重感受，高开放性加高敏感度，对意义、美和真实有近乎执念的追求，是天生的创作者。",s:"共情深，有审美，价值观坚定",b:"现实与理想落差大时容易内耗，拖延也是常事",m:"松露蘑菇披萨（懂你的沉默）",x:"玛格丽特披萨（TA要结果，你要意义）",r:"稀有款 5%"}
+};
+let i,sc,res;
+const $=id=>document.getElementById(id);
+function show(n){for(let k=0;k<3;k++)$("s"+k).classList.toggle("hide",k!=n)}
+function start(){i=0;sc={E:0,I:0,S:0,N:0,R:0,F:0};show(1);ask();window.scrollTo(0,0)}
+function ask(){
+ const q=Q[i];
+ $("pg").style.width=(i/Q.length*100)+"%";
+ $("no").textContent=(i+1)+" / "+Q.length;
+ $("q").textContent=q[0];
+ $("ops").innerHTML="";
+ [q[1],q[2]].forEach(o=>{
+  const b=document.createElement("button");
+  b.className="op";b.textContent=o[0];
+  b.onclick=()=>{sc[o[1]]++;i++;i<Q.length?ask():finish()};
+  $("ops").appendChild(b);
+ });
+}
+function finish(){
+ const k=(sc.E>=sc.I?"E":"I")+(sc.S>=sc.N?"S":"N")+(sc.R>=sc.F?"R":"F");
+ const p=T[k];res=p;
+ $("re").textContent=p.e;$("rn").textContent=p.n;$("rt").textContent=p.t;$("rd").textContent=p.d;
+ const it=[["✨","天赋配料",p.s],["⚠️","烤焦点",p.b],["💞","最佳搭档",p.m],["💥","天敌",p.x]];
+ $("rb").innerHTML=it.map(x=>"<div class='it'><div class='ih'>"+x[0]+" "+x[1]+"</div>"+x[2]+"</div>").join("");
+ $("rc").textContent=k+" · "+p.r;
+ const C={ESR:["#e8472b","#f5a623"],ESF:["#f59e0b","#f97316"],ENR:["#dc2626","#f43f5e"],ENF:["#eab308","#22c55e"],ISR:["#16a34a","#84cc16"],ISF:["#f59e0b","#fbbf24"],INR:["#78716c","#a16207"],INF:["#8b5cf6","#ec4899"]}[k];
+ $("poster").style.setProperty("--ac",C[0]);$("poster").style.setProperty("--ac2",C[1]);
+ const ax=[["外向","内向","E","I"],["传统","探索","S","N"],["理性","感性","R","F"]];
+ $("ax").innerHTML=ax.map(a=>{const v=Math.round(sc[a[2]]/(sc[a[2]]+sc[a[3]])*100);return "<div><span>"+a[0]+" "+v+"%</span><span>"+a[1]+" "+(100-v)+"%</span></div><div class='bar'><i style='width:"+v+"%'></i></div>"}).join("");
+ show(2);window.scrollTo(0,0);
+}
+function share(){
+ const t="我是【"+res.n+"】"+res.e+"——"+res.t+"。最佳搭档："+res.m.split("（")[0]+"。你是哪种披萨？来测测 👉 "+location.href;
+ try{navigator.clipboard.writeText(t).then(()=>{$("sb").textContent="已复制 ✓"},()=>{prompt("复制分享文案",t)})}catch(e){prompt("复制分享文案",t)}
+}
+</script>
+</body>
+</html>
